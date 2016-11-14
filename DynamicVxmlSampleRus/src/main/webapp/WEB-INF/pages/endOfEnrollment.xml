@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="ru-RU" application="include/approot.xml">
+    <form>
+        <block>
+            <prompt bargein="false">
+                Ваша регистрация завершена. До свидания!
+            </prompt>
+            <disconnect/>
+        </block>
+    </form>
+</vxml>

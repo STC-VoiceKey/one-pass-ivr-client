@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="ru-RU" application="include/approot.xml">
+    <form>
+        <block>
+            <prompt bargein="false">
+                Если Вы хотите удалить свой отпечаток, нажмите 1. Если хотите сохранить его, нажмите 0.
+            </prompt>
+        </block>
+        <field>
+            <grammar mode="dtmf" src="../grammars/yesno.xml"/>
+            <filled>
+                <if cond="application.lastresult$.utterance == '0'">
+                    <prompt bargein="false">
+                        Ваш отпечаток будет сохранен. До свидания!
+                    </prompt>
+                    <disconnect/>
+                <else/>
+                    <goto next="deletePerson.xml"/>
+                </if>
+            </filled>
+        </field>
+    </form>
+</vxml>

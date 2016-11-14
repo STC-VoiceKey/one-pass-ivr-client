@@ -2,4 +2,4 @@
 
 # License
 
-Copyright (c) 2016 STC. Licensed under the FreeBSD [License|https://onepass.tech/license-agreement.html]
+Copyright (c) 2016 STC. Licensed under the FreeBSD <a href="https://onepass.tech/license-agreement.html">License</a>.

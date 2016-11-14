@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="en-US" application="include/approot.xml">
+    <form>
+        <block>
+            <prompt bargein="false">
+                Welcome to VoiceKey IVR! Please enter three numbers of your ID.
+            </prompt>
+        </block>
+        <field>
+            <noinput>
+                <prompt bargein="false">
+                    Please enter your login of 3 numbers.
+                </prompt>
+            </noinput>
+            <nomatch>
+                <prompt>
+                    Please enter your login of 3 numbers.
+                </prompt>
+            </nomatch>
+            <grammar mode="dtmf" src="../grammars/personId.xml"/>
+            <filled>
+                <assign expr="application.lastresult$.utterance" name="application.personId"/>
+                <log>Person ID: <value expr="application.personId"/></log>
+                <submit next="getPerson.jsp" namelist="personId port host mode"/>
+            </filled>
+        </field>
+    </form>
+</vxml>

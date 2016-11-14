@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="ru-RU" application="include/approot.xml">
+    <form>
+        <var name="password" expr="''"/>
+        <block>
+            <assign name="password" expr="password2_ru"/>
+            <prompt bargein="false">
+                А теперь после гудка произнесите цифры от 9 до 0.
+            </prompt>
+        </block>
+        <record name="enroll_2" maxtime="30s" beep="true" dtmfterm="true" finalsilence="1s">
+            <noinput>
+                <prompt>
+                    Произнесите цифры по одной от 9 до 0.
+                </prompt>
+            </noinput>
+            <nomatch>
+                <prompt>
+                    Произнесите цифры по одной от 9 до 0.
+                </prompt>
+            </nomatch>
+            <filled>
+                <submit expr="'enrollment_2.jsp?personId=' + application.personId +
+                '&amp;password=' + encodeURI(password)+
+                '&amp;port=' + application.port +
+                '&amp;host=' + host +
+                '&amp;mode=' + mode"
+                        enctype="multipart/form-data"
+                        method="post"/>
+            </filled>
+        </record>
+    </form>
+</vxml>

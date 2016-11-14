@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="en-US" application="include/approot.xml">
+    <form>
+        <subdialog name="verificationResult" method="get" fetchtimeout="3s"
+                   srcexpr="'verificationResult.jsp?sessionId=' + application.sessionId +
+                   '&amp;personId=' + application.personId +
+                   '&amp;host=' + application.host +
+                   '&amp;port=' + application.port +
+                   '&amp;mode=' + mode">
+            <filled>
+                <assign name="verificationCounter" expr="verificationCounter + 1"/>
+                <var name="application.score" expr="verificationResult.score"/>
+                <if cond="application.score &lt; application.threshold">
+                    <if cond="verificationCounter &lt; application.attempts">
+                        <prompt bargein="false">
+                            You are not verified. Please try one more time.
+                        </prompt>
+                        <submit next="startVerification.jsp" namelist="personId"/>
+                    <else/>
+                        <prompt bargein="false">
+                            You are not verified. Good bye!
+                        </prompt>
+                        <disconnect/>
+                    </if>
+                    <else/>
+                    <prompt bargein="false">
+                        You are verified with the score: <value expr="application.score"/>.
+                    </prompt>
+                    <goto next="endOfVerification.xml"/>
+                </if>
+            </filled>
+        </subdialog>
+    </form>
+</vxml>

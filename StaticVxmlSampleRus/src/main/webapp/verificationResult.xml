@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="ru-RU" application="include/approot.xml">
+    <form>
+        <subdialog name="verificationResult" method="get" fetchtimeout="3s"
+                   srcexpr="'verificationResult.jsp?sessionId=' + application.sessionId
+				+ '&amp;personId=' + application.personId
+				+ '&amp;host=' + application.host
+				+ '&amp;port=' + application.port
+				+ '&amp;mode=' + application.mode">
+            <filled>
+                <assign name="application.score" expr="verificationResult.score"/>
+                <if cond="application.score==400">
+                    <prompt>
+                        Вы не прошли верификацию. До свидания!
+                    </prompt>
+                <else/>
+                    <if cond="application.score &lt; application.threshold">
+                        <if cond="verificationCounter &lt; application.attempts">
+                            <assign name="verificationCounter" expr="verificationCounter + 1"/>
+                            <prompt>
+                                Вы не прошли верификацию. Попробуйте еще раз.
+                            </prompt>
+                            <submit next="startVerification.jsp" namelist="personId host port"/>
+                        <else/>
+                            <prompt>
+                                Вы не прошли верификацию. До свидания!
+                            </prompt>
+                        </if>
+                    <else/>
+                        <prompt>
+                            Вы верифицированы с результатом <value expr="application.score"/>
+                        </prompt>
+                        <goto next="endOfVerification.xml"/>
+                    </if>
+                </if>
+            </filled>
+        </subdialog>
+    </form>
+</vxml>

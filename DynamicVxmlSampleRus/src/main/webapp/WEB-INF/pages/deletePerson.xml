@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="ru-RU" application="include/approot.xml">
+    <form>
+        <subdialog name="deletePerson" method="get" fetchtimeout="3s"
+                   srcexpr="'deletePerson.jsp?personId=' + application.personId +
+                   '&amp;host=' + application.host +
+                   '&amp;port=' + application.port +
+                   '&amp;mode=' + application.mode">
+            <filled>
+                <if cond="application.language=='en'">
+                    <prompt>
+                        Your voice print is deleted. Good bye!
+                    </prompt>
+                    <else/>
+                    <prompt>
+                        Ваш отпечаток удален! До свидания!
+                    </prompt>
+                </if>
+                <disconnect/>
+            </filled>
+        </subdialog>
+    </form>
+</vxml>

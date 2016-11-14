@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="ru-RU" application="include/approot.xml">
+    <form>
+        <block>
+            <prompt bargein="false">
+                Введите Ваш логин при помощи цифр на экране телефона.
+            </prompt>
+        </block>
+        <field>
+            <noinput>
+                <prompt>
+                    Пожалуйста введите Ваш логин с помощью клавиш телефона.
+                </prompt>
+            </noinput>
+            <nomatch>
+                <prompt>
+                    Пожалуйста введите Ваш логин с помощью клавиш телефона.
+                </prompt>
+            </nomatch>
+            <grammar mode="dtmf" src="../grammars/personId.xml"/>
+            <filled>
+                <assign expr="application.lastresult$.utterance" name="application.personId"/>
+                <log>Person ID: <value expr="application.personId"/></log>
+                <submit next="getPerson.jsp" namelist="personId port host mode"/>
+            </filled>
+        </field>
+    </form>
+</vxml>

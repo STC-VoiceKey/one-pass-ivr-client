@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="ru-RU" application="include/approot.xml">
+    <form>
+        <block>
+            <prompt bargein="false">
+                После гудка произнесите цифры
+                <value expr="application.password"/>
+            </prompt>
+        </block>
+        <record name="verification" maxtime="20s" beep="true" dtmfterm="false" finalsilence="1s">
+            <filled>
+                <submit expr="'verification.jsp?sessionId=' + application.sessionId +
+                '&amp;password=' + encodeURI(application.password) +
+                '&amp;personId=' + application.personId +
+				'&amp;host=' + application.host +
+				'&amp;port=' + application.port +
+				'&amp;mode=' + application.mode"
+                        enctype="multipart/form-data" method="post"
+                        namelist="verification application.sessionId application.password"/>
+            </filled>
+        </record>
+    </form>
+</vxml>

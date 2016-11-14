@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml version="2.0" xmlns="http://www.w3.org/2001/vxml" xml:lang="en-US">
+    <var name="serverStatus" expr="0"/>
+    <var name="host" expr="''"/>
+    <var name="port" expr="0000"/>
+    <var name="sessionId" expr="''"/>
+    <var name="verificationCounter" expr="1"/>
+    <var name="score" expr="0"/>
+    <var name="msisdn" expr="05"/>
+    <var name="personId" expr="''"/>
+    <var name="password" expr="''"/>
+    <var name="threshold" expr="0"/>
+    <var name="attempts" expr="0"/>
+    <var name="mode" expr="''"/>
+    <var name="password1_en" expr="'zero one two three four five six seven eight nine'"/>
+    <var name="password2_en" expr="'nine eight seven six five four three two one zero'"/>
+
+    <catch event="error">
+        <prompt>
+            The system is experiencing technical difficulties. Please try later.
+        </prompt>
+        <submit next="checkFullEnrollment.jsp" namelist="personId host port mode"/>
+    </catch>
+
+    <catch event="maxspeechtimeout">
+        <prompt>
+            Sorry! I can't understand you. Please, try one more time.
+        </prompt>
+    </catch>
+
+    <catch event = "connection.disconnect">
+        <submit next="checkFullEnrollment.jsp" namelist="personId host port mode"/>
+    </catch>
+
+</vxml>

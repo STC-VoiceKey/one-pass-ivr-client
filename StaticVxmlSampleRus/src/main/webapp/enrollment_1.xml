@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="ru-RU" application="include/approot.xml">
+    <form>
+        <record name="enroll_1" maxtime="30s" beep="true" dtmfterm="true">
+            <prompt>
+                Для регистрации в системе произнесите фразу "Мой голос - мой пароль".
+            </prompt>
+            <noinput>
+                <prompt>
+                    Произнесите фразу "Мой голос - мой пароль"
+                </prompt>
+            </noinput>
+            <filled>
+                <submit expr="'enrollment_1.jsp?personId=' + application.personId
+                + '&amp;host=' + application.host
+				+ '&amp;port=' + application.port
+				+ '&amp;mode=' + application.mode"
+                enctype="multipart/form-data"
+                method="post"
+                namelist="enroll_1 application.personId"/>
+            </filled>
+        </record>
+    </form>
+</vxml>
