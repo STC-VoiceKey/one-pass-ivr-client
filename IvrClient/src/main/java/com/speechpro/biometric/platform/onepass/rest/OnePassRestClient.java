@@ -17,9 +17,9 @@ public class OnePassRestClient {
 
     private static OnePassRestClient instance;
 
-    public static void initialize(String  host, String port, boolean dynamicMode){
+    public static void initialize(String protocol, String host, String port, String applicationRoot){
         if (instance == null){
-            instance = new OnePassRestClient(host, port, dynamicMode);
+            instance = new OnePassRestClient(protocol, host, port, applicationRoot);
         }
     }
 
@@ -40,11 +40,11 @@ public class OnePassRestClient {
     private BasicRestClient client;
     private OnePassRestPaths paths;
 
-    private OnePassRestClient(String host, String port, boolean isDynamic){
+    private OnePassRestClient(String protocol, String host, String port, String applicationRoot){
     client = new BasicRestClient(Collections.<Header>singletonList(
                     new BasicHeader("Content-Type", "application/json; charset=UTF-8")
                     ));
-    paths = new OnePassRestPaths(host, port, isDynamic);
+    paths = new OnePassRestPaths(protocol, host, port, applicationRoot);
 }
 
     public CloseableHttpResponse sendPersonVoiceDynamicFile(String personId, SendDynamicFileRequestDto data){

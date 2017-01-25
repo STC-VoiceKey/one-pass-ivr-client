@@ -1,7 +1,8 @@
 package com.speechpro.biometric.platform.onepass.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jdk7.Jdk7Module;
+
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -26,7 +27,7 @@ public class JsonSerializer {
 
         if (instance != null) {
             ObjectMapper mapper = new ObjectMapper();
-            mapper.registerModule(new JSR310Module());
+            mapper.registerModule(new Jdk7Module());
             StringWriter writer = new StringWriter();
 
             if (pretty) {
@@ -36,6 +37,7 @@ public class JsonSerializer {
             }
 
             result = writer.toString();
+
         }
 
         return result;
@@ -46,7 +48,7 @@ public class JsonSerializer {
 
         if (json != null) {
             ObjectMapper mapper = new ObjectMapper();
-            mapper.registerModule(new JSR310Module());
+            mapper.registerModule(new Jdk7Module());
 
             result = mapper.readValue(json, type);
         }

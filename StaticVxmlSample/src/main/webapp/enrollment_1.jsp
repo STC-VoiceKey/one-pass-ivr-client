@@ -15,23 +15,26 @@
 		log.info("      jsp: audio size is: " + audioBytes.length);
 		String personId = (request.getParameter("personId") != null
 				&& !request.getParameter("personId").isEmpty()) ? request.getParameter("personId") : "00";
-		String host = (request.getParameter("host") != null
-				&& !request.getParameter("host").isEmpty()) ? request.getParameter("host") : "000.000.000.000";
-		String port = (request.getParameter("port") != null
-				&& !request.getParameter("port").isEmpty()) ? request.getParameter("port") : "0000";
-		String mode = (request.getParameter("mode") != null
-				&& !request.getParameter("mode").isEmpty()) ? request.getParameter("mode") : "none";
+		String root = (request.getParameter("root") != null
+   				&& !request.getParameter("root").isEmpty()) ? request.getParameter("root") : "none";
+        String host = (request.getParameter("host") != null
+        && !request.getParameter("host").isEmpty()) ? request.getParameter("host") : "none";
+        String port = (request.getParameter("port") != null
+        && !request.getParameter("port").isEmpty()) ? request.getParameter("port") : "";
+        String protocol = (request.getParameter("protocol") != null
+        && !request.getParameter("protocol").isEmpty()) ? request.getParameter("protocol") : "none";
 
 		log.info("      jsp: personId = " + personId);
-		log.info("      jsp: host = " + host);
-		log.info("      jsp: port = " + port);
-		log.info("      jsp: mode = " + mode);
+		log.info("      jsp: root = " + root);
+		log.info("		jsp: protocol = " + protocol);
+        log.info("		jsp: port = " + port);
+        log.info("		jsp: host = " + host);
 
-		OnePassApi onePassApi = new OnePassApi(host, port, mode);
+		OnePassApi onePassApi 	= new OnePassApi(protocol, host, port, root);
 		PersonApi personApi = onePassApi.person(personId);
 		byte[] encoded = Base64.encodeBase64(audioBytes);
 		String encodedString = new String(encoded);
-		int sendingResult = personApi.sendRegistrationVoice(encodedString);
+		boolean sendingResult = personApi.sendRegistrationVoice(encodedString);
 
 		log.info("      jsp: Trying to create first model for the person = " + personId);
 
@@ -39,7 +42,7 @@
 
 <form id="getPerson">
 	<block>
-		<if cond="<%=sendingResult%> == 204">
+		<if cond="<%=sendingResult%> == true">
 		    <goto next="enrollment_2.xml"/>
 		<else/>
 		    <goto next="enrollment_1.xml"/>

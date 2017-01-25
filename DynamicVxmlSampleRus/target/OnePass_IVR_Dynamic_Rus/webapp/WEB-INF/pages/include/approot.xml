@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml version="2.0" xmlns="http://www.w3.org/2001/vxml" xml:lang="ru-RU">
+    <var name="serverStatus" expr="0"/>
+    <var name="host" expr="''"/>
+    <var name="verificationCounter" expr="1"/>
+    <var name="port" expr=""/>
+    <var name="mode" expr="''"/>
+    <var name="root" expr="''"/>
+    <var name="personId" expr="''"/>
+    <var name="protocol" expr="''"/>
+    <var name="password" expr="''"/>
+    <var name="threshold" expr=""/>
+    <var name="attempts" expr="''"/>
+    <var name="verificationSessionId" expr="''"/>
+    <var name="password1_ru" expr="'ноль один два три четыре пять шесть семь восемь девять'"/>
+    <var name="password2_ru" expr="'девять восемь семь шесть пять четыре три два один ноль'"/>
+
+    <catch event="error">
+        <prompt>К сожалению, в работе системы возникли технические неполадки.
+            Пожалуйста, попробуйте позвонить позже.
+        </prompt>
+        <disconnect/>
+    </catch>
+
+
+    <catch event = "connection.disconnect.hangup">
+        <submit next="checkFullEnrollment.jsp" namelist="personId host port mode"/>
+    </catch>
+
+</vxml>

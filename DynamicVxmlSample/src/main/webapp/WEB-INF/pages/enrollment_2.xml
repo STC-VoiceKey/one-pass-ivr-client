@@ -17,9 +17,10 @@
             <filled>
                 <submit expr="'enrollment_2.jsp?personId=' + application.personId +
                 '&amp;password=' + encodeURI(password) +
+                '&amp;host=' + application.host +
                 '&amp;port=' + application.port +
-                '&amp;host=' + host +
-                '&amp;mode=' + mode"
+                '&amp;protocol=' + application.protocol +
+                '&amp;root=' + root"
                         enctype="multipart/form-data"
                         method="post"/>
             </filled>

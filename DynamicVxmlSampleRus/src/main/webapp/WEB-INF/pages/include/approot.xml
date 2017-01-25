@@ -5,7 +5,9 @@
     <var name="verificationCounter" expr="1"/>
     <var name="port" expr=""/>
     <var name="mode" expr="''"/>
+    <var name="root" expr="''"/>
     <var name="personId" expr="''"/>
+    <var name="protocol" expr="''"/>
     <var name="password" expr="''"/>
     <var name="threshold" expr=""/>
     <var name="attempts" expr="''"/>
@@ -22,7 +24,7 @@
 
 
     <catch event = "connection.disconnect.hangup">
-        <submit next="checkFullEnrollment.jsp" namelist="personId host port mode"/>
+        <submit next="checkFullEnrollment.jsp" namelist="personId host port root protocol"/>
     </catch>
 
 </vxml>

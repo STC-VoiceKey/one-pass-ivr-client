@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml xmlns="http://www.w3.org/2001/vxml" version="2.0" xml:lang="en-US" application="include/approot.xml">
+    <form>
+        <property name="termchar" value="#"/>
+        <field>
+            <prompt bargein="false">
+                If you want to delete your voiceprint, press 1.
+                If you want to save it, press 0.
+            </prompt>
+            <grammar mode="dtmf" src="WEB-INF/grammars/yesno.xml"/>
+            <filled>
+                <if cond="application.lastresult$.utterance == '0'">
+                    <prompt bargein="false">
+                        Your voiceprint will be saved. Goodbye!
+                    </prompt>
+                    <disconnect/>
+                <else/>
+                    <goto next="deletePerson.xml"/>
+                </if>
+            </filled>
+        </field>
+    </form>
+</vxml>

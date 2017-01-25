@@ -11,18 +11,22 @@ public class OnePassRestPaths {
     private static String verificationVoiceDynamicFile          = "verification/%s/voice/dynamic/file";         // %s - session ID
     private static String verificationVoiceStaticFile           = "verification/%s/voice/static/file";          // %s - session ID
     private static String verificationStart                     = "verification/start/%s";                      // %s - person ID
-    private static String verificationScoreCloseSessionFalse     = "verification/%s/score?close_session=false"; // %s - session ID
+    private static String verificationScoreCloseSessionFalse    = "verification/%s/score?close_session=false"; // %s - session ID
     private static String closeVerification                     = "verification/%s";                            // %s - session ID
 
-    private String root         = null;
-    private String rootStatic   = "http://%s:%s/ivr_static/rest/v4/";
-    private String rootDynamic  = "http://%s:%s/ivr_dynamic/rest/v4/";
+    private String root             = null;
+    private String applicationPath          = "%s://%s/%s/rest/v4/";
+    private String applicationPathWithPort  = "%s://%s:%s/%s/rest/v4/";
 
-    public OnePassRestPaths(String host, String port, boolean isDynamic) {
-        if(isDynamic)
-            root = String.format(rootDynamic, host, port);
+    //private String rootStatic   = "http://%s:%s/%s/rest/v4/";
+    //private String rootDynamic  = "http://%s:%s/%s/rest/v4/";
+
+    public OnePassRestPaths(String protocol, String host, String port, String applicationRoot) {
+        //root = String.format(applicationPath, protocol, host, port, applicationRoot);
+        if(port.equals(""))
+            root = String.format(applicationPath, protocol, host, applicationRoot);
         else
-            root = String.format(rootStatic, host, port);
+            root = String.format(applicationPathWithPort, protocol, host, port, applicationRoot);
     }
 
     public String getPersonUri(String personId){

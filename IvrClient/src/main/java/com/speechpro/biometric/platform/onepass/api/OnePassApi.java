@@ -9,8 +9,8 @@ import org.apache.log4j.Logger;
 public class OnePassApi {
     private static final Logger LOGGER = Logger.getLogger(OnePassApi.class);
 
-    public OnePassApi(String serverIpAddress, String serverPort, String mode){
-        OnePassRestClient.initialize(serverIpAddress, serverPort, mode.equals("dynamic") ? true : false);
+    public OnePassApi(String protocol, String host, String port, String applicationRoot){
+        OnePassRestClient.initialize(protocol, host, port, applicationRoot);
         LOGGER.info("OnePassApi initialized");
     }
 

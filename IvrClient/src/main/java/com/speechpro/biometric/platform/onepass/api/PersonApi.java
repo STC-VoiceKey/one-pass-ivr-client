@@ -26,14 +26,14 @@ public class PersonApi {
         try(CloseableHttpResponse response = OnePassRestClient.get().getPerson(id)){
             if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
                 result = true;
-                LOGGER.info(String.format("Person with id: %s exists", id));
+                LOGGER.info(String.format("Person with id %s exists", id));
             }
             else {
-                LOGGER.info(String.format("Person with id: %s does not exists", id));
+                LOGGER.info(String.format("Person with id %s does not exists", id));
             }
         } catch (IOException e) {
             e.printStackTrace();
-            LOGGER.error("Couldn't check if the person with id: " + id + " exists");
+            LOGGER.error("Couldn't check if the person with id " + id + " exists");
         }
         return result;
     }
@@ -69,42 +69,52 @@ public class PersonApi {
         return result;
     }
 
-    public int sendRegistrationVoice(String password, String sound64Data){
+    public boolean sendRegistrationVoice(String password, String sound64Data){
         LOGGER.info("Sending registration voice");
-        int result = 0;
+        boolean sent = false;
         try (CloseableHttpResponse response = OnePassRestClient.get().sendPersonVoiceDynamicFile(id,
                 new SendDynamicFileRequestDto(URLDecoder.decode(password, "UTF-8"), sound64Data))){
-            result = response.getStatusLine().getStatusCode();
-            LOGGER.info("Result code of sendRegistrationVoice is " + result);
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_NO_CONTENT){
+              sent = true;
+            }
+            //result = response.getStatusLine().getStatusCode();
+            LOGGER.info("Result of sendRegistrationVoice is " + sent);
         } catch (IOException e) {
             LOGGER.error("Couldn't send sound for registration for person with id: " + id);
             e.printStackTrace();
         }
-        return result;
+        return sent;
     }
 
-    public int sendRegistrationVoice(String sound64Data){
+    public boolean sendRegistrationVoice(String sound64Data){
         LOGGER.info("Sending static registration voice");
-        int result = 0;
+        boolean sent = false;
         try (CloseableHttpResponse response = OnePassRestClient.get().sendPersonVoiceStaticFile(id,
                 new SendStaticFileRequestDto(sound64Data))){
-            result = response.getStatusLine().getStatusCode();
-            LOGGER.info("Result code of sendRegistrationVoice is " + result);
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_NO_CONTENT){
+                sent = true;
+            }
+            LOGGER.info("Result of sendRegistrationVoice is " + sent);
         } catch (IOException e) {
             LOGGER.error("Couldn't send sound for static registration for person with id: " + id);
             e.printStackTrace();
         }
-        return result;
+        return sent;
     }
 
-    public void delete(){
+    public boolean delete(){
+        boolean deleted = false;
          try(CloseableHttpResponse response = OnePassRestClient.get().deletePerson(id)){
              LOGGER.info("Deleting person with id: " + id);
              LOGGER.info("Result: " + response.getStatusLine().getStatusCode());
+             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_NO_CONTENT){
+                 deleted = true;
+             }
          } catch (IOException e) {
              LOGGER.error("Couldn't delete person with id: " + id, e);
              e.printStackTrace();
          }
+         return deleted;
     }
 
     public VerificationApi startVerification(){

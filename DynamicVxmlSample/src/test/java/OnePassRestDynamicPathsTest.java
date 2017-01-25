@@ -6,7 +6,7 @@ import junit.framework.Assert;
  */
 public class OnePassRestDynamicPathsTest {
 
-    private static final OnePassRestPaths REST_PATHS = new OnePassRestPaths("192.168.29.169", "8079", true);
+    private static final OnePassRestPaths REST_PATHS = new OnePassRestPaths("http", "192.168.29.169", "8079" , "ivr_dynamic");
     private static final String PERSON_ID = "01";
     private static final String SESSION_ID = "a00a0000-a00a-0000-00a0-000a0aaaa000";
 

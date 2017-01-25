@@ -19,14 +19,14 @@ public class VerificationApi {
     private final String sessionId;
     private final String verificationPassword;
 
-    protected VerificationApi(String password, String sessionId) {
+    public VerificationApi(String password, String sessionId) {
         this.sessionId = sessionId;
         this.verificationPassword = password;
         LOGGER.info(String.format("VerificationApi initialized. SessionId = %s",
                     sessionId));
     }
 
-    protected VerificationApi(String sessionId) {
+    public VerificationApi(String sessionId) {
         this.sessionId = sessionId;
         this.verificationPassword = "";
         LOGGER.info(String.format("VerificationApi initialized. SessionId = %s",
@@ -46,34 +46,39 @@ public class VerificationApi {
         }
     }
 
-    public int sendVerificationVoice(String sound64Data){
-        int result = 0;
+    public boolean sendVerificationVoice(String sound64Data){
+        boolean sent = false;
         try(CloseableHttpResponse response =
                     OnePassRestClient.get().sendVerificationVoiceDynamicFile(
                             sessionId,
                             new SendDynamicFileRequestDto(verificationPassword, sound64Data))){
-            result = response.getStatusLine().getStatusCode();
-
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_NO_CONTENT){
+                sent = true;
+                LOGGER.info(String.format("Dynamic verification data sent in session %s", sessionId));
+            }
         } catch (IOException e) {
             LOGGER.error("Couldn't send verification sound data for session with id: " + sessionId);
             e.printStackTrace();
         }
-        return result;
+        return sent;
     }
 
-    public int sendStaticVerificationVoice(String sound64Data){
-        int result = 0;
+    public boolean sendStaticVerificationVoice(String sound64Data){
+        boolean sent = false;
         try(CloseableHttpResponse response =
                     OnePassRestClient.get().sendVerificationVoiceStaticFile(
                             sessionId,
                             new SendStaticFileRequestDto(sound64Data))){
-            result = response.getStatusLine().getStatusCode();
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_NO_CONTENT){
+                sent = true;
+                LOGGER.info(String.format("Static verification data sent in session %s", sessionId));
+            }
 
         } catch (IOException e) {
             LOGGER.error("Couldn't send verification sound data for session with id: " + sessionId);
             e.printStackTrace();
         }
-        return result;
+        return sent;
     }
 
     public double getVerificationScore(){
@@ -98,7 +103,7 @@ public class VerificationApi {
                     DtoHelper.create(response.getEntity().getContent(),
                             GetStaticVerificationResultResponseDto.class);
             result = verificationScore.score;
-            LOGGER.info("getVerificationScore() method called, result is : " + result);
+            LOGGER.info("getStaticVerificationScore() method called, result is : " + result);
         } catch (IOException e) {
             LOGGER.error("Couldn't get verification result for session with id: " + sessionId);
             e.printStackTrace();
@@ -107,17 +112,16 @@ public class VerificationApi {
     }
 
     public boolean closeVerificationSession(){
-        boolean result = false;
+        boolean closed = false;
         try (CloseableHttpResponse response = OnePassRestClient.get().closeVerificationSession(sessionId)){
             if(response.getStatusLine().getStatusCode() == HttpStatus.SC_NO_CONTENT){
-                result = true;
-                LOGGER.info("closeVerificationSession() method called, result is : " + result);
+                closed = true;
+                LOGGER.info("closeVerificationSession() method called, result is : " + closed);
             }
         } catch (IOException e) {
             LOGGER.error("Couldn't close verification session with id: " + sessionId);
             e.printStackTrace();
-            result = false;
         }
-        return result;
+        return closed;
     }
 }

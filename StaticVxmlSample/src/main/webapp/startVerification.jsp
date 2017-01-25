@@ -14,19 +14,22 @@
 
 		String personId = (request.getParameter("personId") != null
 				&& !request.getParameter("personId").isEmpty()) ? request.getParameter("personId") : "00";
-		String host = (request.getParameter("host") != null
-				&& !request.getParameter("host").isEmpty()) ? request.getParameter("host") : "00";
-		String port = (request.getParameter("port") != null
-				&& !request.getParameter("port").isEmpty()) ? request.getParameter("port") : "00";
-		String mode = (request.getParameter("mode") != null
-				&& !request.getParameter("mode").isEmpty()) ? request.getParameter("mode") : "none";
+		String root = (request.getParameter("root") != null
+   				&& !request.getParameter("root").isEmpty()) ? request.getParameter("root") : "none";
+   		String protocol = (request.getParameter("protocol") != null
+        && !request.getParameter("protocol").isEmpty()) ? request.getParameter("protocol") : "none";
+        String host = (request.getParameter("host") != null
+        && !request.getParameter("host").isEmpty()) ? request.getParameter("host") : "none";
+        String port = (request.getParameter("port") != null
+        && !request.getParameter("port").isEmpty()) ? request.getParameter("port") : "";
 
-		log.info("      jsp: host = " + host);
-		log.info("      jsp: port = " + port);
 		log.info("      jsp: personId = " + personId);
-		log.info("      jsp: mode = " + mode);
+		log.info("      jsp: protocol = " + protocol);
+	    log.info("      jsp: host: " + host);
+	    log.info("      jsp: root: " + root);
+	    log.info("      jsp: port: " + port);
 
-		OnePassApi onePassApi = new OnePassApi(host, port, mode);
+	    OnePassApi onePassApi = new OnePassApi(protocol, host, port, root);
 		VerificationApi verificationApi = onePassApi.person(personId).startStaticVerification();
 		String sessionId = verificationApi.getSessionId();
 

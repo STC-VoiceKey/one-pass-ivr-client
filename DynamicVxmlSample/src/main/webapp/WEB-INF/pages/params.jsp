@@ -13,27 +13,26 @@
 	log.info("=====params.jsp=====");
 
     ConfigReader cr = new ConfigReader();
-    String host 		= cr.readProperty("biometric.platform.host");
-    String port 		= cr.readProperty("biometric.platform.port");
 	String threshold 	= cr.readProperty("biometric.platform.threshold");
 	String attempts 	= cr.readProperty("biometric.platform.attempts");
-	String mode 		= cr.readProperty("biometric.platform.mode");
+	String root 		= cr.readProperty("biometric.platform.root");
+    String host 		= cr.readProperty("biometric.platform.host");
+    String port 		= cr.readProperty("biometric.platform.port");
+    String protocol     = cr.readProperty("biometric.platform.protocol");
 
-    log.info("      jsp: host: " + host);
-    log.info("      jsp: port: " + port);
     log.info("      jsp: threshold: " + threshold);
     log.info("      jsp: attempts: " + attempts);
-    log.info("      jsp: mode: " + mode);
-
+    log.info("      jsp: root: " + root);
+    log.info("      jsp: host: " + host);
+    log.info("      jsp: port: " + port);
+    log.info("      jsp: protocol: " + protocol);
 %>
 
     <form id="getPerson">
 	    <block>
-			<assign name="application.host" expr="'<%=host%>'"/>
-	        <assign name="application.port" expr="<%=port%>"/>
 			<assign name="application.threshold" expr="<%=threshold%>"/>
 			<assign name="application.attempts" expr="<%=attempts%>"/>
-			<assign name="application.mode" expr="'<%=mode%>'"/>
+			<assign name="application.root" expr="'<%=root%>'"/>
 	        <submit next="hello.xml"/>
 	    </block>
 	</form>
