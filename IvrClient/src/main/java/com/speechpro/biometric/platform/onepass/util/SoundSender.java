@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -20,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.io.File;
 
 /**
  * Created by sadurtinova on 06.09.2016.
@@ -116,4 +116,26 @@ public class SoundSender {
         }
     }
 
+    public static String saveAudioIdText(byte[] bytes, String id, String text ){
+        String phrase = LettersToNumbersStringConverter.convertLettersToNumbers(text);
+        String audioPath = String.format("C:/records/%s/%s_01_%s.wav", id, id, phrase);
+        try {
+            FileUtils.writeByteArrayToFile(new File(audioPath), bytes);
+            LOGGER.info("File saved to: " + audioPath);
+        } catch (IOException e) {
+            LOGGER.info("!!!__Couldn't write bytes into the file__!!!");
+            e.printStackTrace();
+        }
+        return audioPath;
+    }
+
+    public static void deleteAudioFile(String path){
+        try {
+            FileUtils.forceDelete(new File(path));
+            LOGGER.info("File " + path + " deleted");
+        }
+        catch (IOException ex){
+            LOGGER.error("Can't delete file " + path);
+        }
+    }
 }

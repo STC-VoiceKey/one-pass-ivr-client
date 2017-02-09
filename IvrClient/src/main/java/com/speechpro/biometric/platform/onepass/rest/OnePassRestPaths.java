@@ -18,11 +18,7 @@ public class OnePassRestPaths {
     private String applicationPath          = "%s://%s/%s/rest/v4/";
     private String applicationPathWithPort  = "%s://%s:%s/%s/rest/v4/";
 
-    //private String rootStatic   = "http://%s:%s/%s/rest/v4/";
-    //private String rootDynamic  = "http://%s:%s/%s/rest/v4/";
-
     public OnePassRestPaths(String protocol, String host, String port, String applicationRoot) {
-        //root = String.format(applicationPath, protocol, host, port, applicationRoot);
         if(port.equals(""))
             root = String.format(applicationPath, protocol, host, applicationRoot);
         else

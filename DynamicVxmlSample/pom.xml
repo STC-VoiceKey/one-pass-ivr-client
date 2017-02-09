@@ -15,7 +15,7 @@
         <dependency>
             <groupId>com.speechpro.ivr</groupId>
             <artifactId>voicekey-ivr-client</artifactId>
-            <version>1.0.17</version>
+            <version>1.0.23</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

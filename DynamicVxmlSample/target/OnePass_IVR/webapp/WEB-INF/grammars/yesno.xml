@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<grammar type='application/srgs+xml' version='1.0' mode='dtmf' root='root' xml:lang="en-US" xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0-literals">
-    <rule id='root' scope='public'>
-        <one-of>
-            <item>0</item>
-            <item>1</item>
-        </one-of>
-    </rule>
-</grammar>
