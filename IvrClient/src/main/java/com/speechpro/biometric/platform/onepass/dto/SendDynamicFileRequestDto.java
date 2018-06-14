@@ -1,5 +1,6 @@
 package com.speechpro.biometric.platform.onepass.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -7,17 +8,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class SendDynamicFileRequestDto {
 
+    public SendDynamicFileRequestDto(){}
+
     @JsonProperty("data")
     public String dataBase64;
 
     @JsonProperty("password")
     public String password;
 
-    public SendDynamicFileRequestDto(){
-
-    }
-
-    public SendDynamicFileRequestDto(String password, String dataBase64){
+    @JsonCreator
+    public SendDynamicFileRequestDto(@JsonProperty("password") String password, @JsonProperty("data") String dataBase64){
         this.password = password;
         this.dataBase64 = dataBase64;
     }

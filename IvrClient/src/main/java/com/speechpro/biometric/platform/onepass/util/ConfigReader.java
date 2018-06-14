@@ -23,11 +23,6 @@ public class ConfigReader {
             e.printStackTrace();
             LOGGER.error("Error during parameter reading" + e.getMessage());
         }
-        return properties.getProperty(pro);
-    }
-
-    public static void main (String [] args){
-        ConfigReader cr = new ConfigReader();
-        System.out.println(cr.readProperty("com.speechpro.biometric.platform.onepass.onepass.api.rest.host"));
+        return properties.getProperty(pro).isEmpty() ? null : properties.getProperty(pro);
     }
 }

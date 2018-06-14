@@ -14,12 +14,12 @@ public class StartDynamicVerificationRequestDto {
         public String password;
 
         @JsonProperty
-        public String verificationId;
+        public String transactionId;
 
         @JsonCreator
         public StartDynamicVerificationRequestDto(@JsonProperty("password") String password,
-                                                  @JsonProperty("verificationId") String verificationId) {
+                                                  @JsonProperty("transactionId") String transactionId) {
             this.password = password;
-            this.verificationId = verificationId;
+            this.transactionId = transactionId;
         }
 }

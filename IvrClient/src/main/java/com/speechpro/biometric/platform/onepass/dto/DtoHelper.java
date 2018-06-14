@@ -1,5 +1,6 @@
 package com.speechpro.biometric.platform.onepass.dto;
 
+
 import com.speechpro.biometric.platform.onepass.util.JsonSerializer;
 
 import java.io.BufferedReader;

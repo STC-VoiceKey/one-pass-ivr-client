@@ -23,20 +23,27 @@ public class BasicRestClient {
     private Header[] defaultHeaders = null;
     private CloseableHttpClient httpClient = HttpClients.createDefault();
 
-    public BasicRestClient(List<Header> defaultHeaders){
-        if(defaultHeaders != null && defaultHeaders.size() > 0){
+    public BasicRestClient(List<Header> defaultHeaders) {
+        if (defaultHeaders != null && defaultHeaders.size() > 0) {
             this.defaultHeaders = new Header[defaultHeaders.size()];
 
-            for(int i = 0; i < defaultHeaders.size(); i++){
+            for (int i = 0; i < defaultHeaders.size(); i++) {
                 this.defaultHeaders[i] = defaultHeaders.get(i);
             }
         }
     }
 
-    CloseableHttpResponse get(String uri) {
+    CloseableHttpResponse get(String uri, Header[] headers) {
         HttpGet getRequest = new HttpGet(uri);
-        if (defaultHeaders != null)
+        if (defaultHeaders != null && headers != null) {
+            Header[] allHeaders = mergeHeaders(defaultHeaders, headers);
+            getRequest.setHeaders(allHeaders);
+        } else if (defaultHeaders != null) {
             getRequest.setHeaders(defaultHeaders);
+        } else if (headers != null) {
+            getRequest.setHeaders(headers);
+        }
+
         CloseableHttpResponse result = null;
         try {
             result = httpClient.execute(getRequest);
@@ -46,12 +53,18 @@ public class BasicRestClient {
         return result;
     }
 
-    CloseableHttpResponse post(String uri, Object body){
+    CloseableHttpResponse post(String uri, Object body, Header[] headers) {
         HttpPost postRequest = new HttpPost(uri);
-        if(body != null)
+        if (body != null)
             postRequest.setEntity(new StringEntity(JsonSerializer.serialize(body), "utf-8"));
-        if(defaultHeaders != null)
+        if (defaultHeaders != null && headers != null) {
+            Header[] allHeaders = mergeHeaders(defaultHeaders, headers);
+            postRequest.setHeaders(allHeaders);
+        } else if (defaultHeaders != null) {
             postRequest.setHeaders(defaultHeaders);
+        } else if (headers != null) {
+            postRequest.setHeaders(headers);
+        }
         CloseableHttpResponse result = null;
         try {
             result = httpClient.execute(postRequest);
@@ -63,21 +76,34 @@ public class BasicRestClient {
         return result;
     }
 
-    CloseableHttpResponse delete(String uri){
+    CloseableHttpResponse delete(String uri, Header[] headers) {
         HttpDelete deleteRequest = new HttpDelete(uri);
-        if(defaultHeaders != null)
+        if (defaultHeaders != null && headers != null) {
+            Header[] allHeaders = mergeHeaders(defaultHeaders, headers);
+            deleteRequest.setHeaders(allHeaders);
+        } else if (defaultHeaders != null) {
             deleteRequest.setHeaders(defaultHeaders);
+        } else if (headers != null) {
+            deleteRequest.setHeaders(headers);
+        }
         CloseableHttpResponse result = null;
         try {
             result = httpClient.execute(deleteRequest);
-        }catch (IOException ex){
+        } catch (IOException ex) {
             LOGGER.error("Failed to execute delete request", ex);
         }
         return result;
     }
 
+    private Header[] mergeHeaders(Header[] headers1, Header[] headers2){
+        Header[] allHeaders = new Header[headers1.length + headers2.length];
+        System.arraycopy(headers1, 0, allHeaders, 0, headers1.length);
+        System.arraycopy(headers2, 0, allHeaders, headers1.length, headers2.length);
+        return allHeaders;
+    }
+
     public void release() {
-        if(httpClient != null) {
+        if (httpClient != null) {
             LOGGER.info("httpClient is not null");
             try {
                 LOGGER.info("Trying to close httpClient");

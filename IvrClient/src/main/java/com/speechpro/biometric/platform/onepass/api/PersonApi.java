@@ -1,157 +1,173 @@
 package com.speechpro.biometric.platform.onepass.api;
 
-import com.speechpro.biometric.platform.onepass.dto.*;
+import com.speechpro.biometric.platform.onepass.dto.DtoHelper;
+import com.speechpro.biometric.platform.onepass.dto.GetPersonResponseDto;
+import com.speechpro.biometric.platform.onepass.exceptions.ExceptionMapper;
 import com.speechpro.biometric.platform.onepass.rest.OnePassRestClient;
+import org.apache.http.Header;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.message.BasicHeader;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.net.URLDecoder;
+import java.util.UUID;
+
 
 /**
  * Created by sadurtinova on 15.09.2016.
  */
 public class PersonApi {
 
-    private final String id;
-    private static final Logger LOGGER = Logger.getLogger(PersonApi.class);
-    protected PersonApi(String personId){
+    private final String personId;
+    private final String sessionId;
+    private static final Logger LOGGER = Logger.getLogger("PersonApi");
+
+    /**
+     * Provides person manipulation
+     * @param personId person identifier
+     * @param sessionId session identifier
+     *
+     */
+    public PersonApi(String personId, String sessionId) {
+        this.sessionId = sessionId;
         LOGGER.info("PersonApi initialized for the person " + personId);
-        this.id = personId;
+        this.personId = personId;
     }
 
-    public boolean exists(){
+    /**
+     * Checks if person exists in biometric system
+     * @return true if person exists
+     */
+    public boolean exists() {
         boolean result = false;
-        try(CloseableHttpResponse response = OnePassRestClient.get().getPerson(id)){
-            if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
+        try (CloseableHttpResponse response = OnePassRestClient.get().getPerson(personId,
+                new Header[]{new BasicHeader("X-Session-Id", sessionId)})) {
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 result = true;
-                LOGGER.info(String.format("Person with id %s exists", id));
-            }
-            else {
-                LOGGER.info(String.format("Person with id %s does not exists", id));
+                LOGGER.info(String.format("Person with personId %s exists", personId));
+            } else if (response.getStatusLine().getStatusCode() == HttpStatus.SC_NOT_FOUND) {
+                LOGGER.info(String.format("Person with personId %s does not exists", personId));
+            } else {
+                ExceptionMapper.map(response);
             }
         } catch (IOException e) {
             e.printStackTrace();
-            LOGGER.error("Couldn't check if the person with id " + id + " exists");
+            LOGGER.error("Couldn't check if the person with personId " + personId + " exists");
         }
         return result;
     }
 
-    public boolean createPerson(){
+    /**
+     * Checks if person fully enrolled in biometric system
+     * @return true if person fully enrolled in biometric system
+     */
+    public boolean isFullEnrolled() {
         boolean result = false;
-        try(CloseableHttpResponse response = OnePassRestClient.get().createPerson(new CreatePersonRequestDto(id))){
-            if(response.getStatusLine().getStatusCode() == HttpStatus.SC_NO_CONTENT) {
-                result = true;
-            }
-            LOGGER.info(String.format("Status code of createPerson() with id %s is %s : "
-                    , id, response.getStatusLine().getStatusCode()));
-            LOGGER.info("Result of createPerson() is: " + result);
-
-        } catch (IOException e) {
-            LOGGER.error("Couldn't create person with id: " + id);
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    public boolean isFullEnrolled(){
-        boolean result = false;
-        try(CloseableHttpResponse response = OnePassRestClient.get().getPerson(id)){
-            if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
+        try (CloseableHttpResponse response = OnePassRestClient.get().getPerson(personId,
+                new Header[]{new BasicHeader("X-Session-Id", sessionId)})) {
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 GetPersonResponseDto personDto = DtoHelper.create(response.getEntity().getContent(), GetPersonResponseDto.class);
                 result = personDto.isFullEnroll;
+            } else {
+                ExceptionMapper.map(response);
             }
         } catch (IOException e) {
-            LOGGER.error("Couldn't check if the person with id: " + id + " is fully enrolled");
+            LOGGER.error("Couldn't check if the person with personId: " + personId + " is fully enrolled");
             e.printStackTrace();
         }
         return result;
     }
 
-    public boolean sendRegistrationVoice(String password, String sound64Data){
-        LOGGER.info("Sending registration voice");
-        boolean sent = false;
-        try (CloseableHttpResponse response = OnePassRestClient.get().sendPersonVoiceDynamicFile(id,
-                new SendDynamicFileRequestDto(URLDecoder.decode(password, "UTF-8"), sound64Data))){
-            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_NO_CONTENT){
-              sent = true;
+    /**
+     * Checks if person fully enrolled in biometric system
+     * @return true if person fully enrolled in biometric system
+     */
+    public int getDynamicModelsNumber() {
+        int result = 0;
+        try (CloseableHttpResponse response = OnePassRestClient.get().getPerson(personId,
+                new Header[]{new BasicHeader("X-Session-Id", sessionId)})) {
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                GetPersonResponseDto personDto = DtoHelper.create(response.getEntity().getContent(), GetPersonResponseDto.class);
+                final int[] modelNumber = new int[1];
+                personDto.models.forEach(model -> {
+                    if("DYNAMIC_VOICE_KEY".equals(model.modelType)){
+                        modelNumber[0] = model.samplesCount;
+                    }
+                });
+                result = modelNumber[0];
+            } else {
+                ExceptionMapper.map(response);
             }
-            //result = response.getStatusLine().getStatusCode();
-            LOGGER.info("Result of sendRegistrationVoice is " + sent);
         } catch (IOException e) {
-            LOGGER.error("Couldn't send sound for registration for person with id: " + id);
+            LOGGER.error("Couldn't check if the person with personId: " + personId + " is fully enrolled");
             e.printStackTrace();
         }
-        return sent;
+        return result;
     }
 
-    public boolean sendRegistrationVoice(String sound64Data){
-        LOGGER.info("Sending static registration voice");
-        boolean sent = false;
-        try (CloseableHttpResponse response = OnePassRestClient.get().sendPersonVoiceStaticFile(id,
-                new SendStaticFileRequestDto(sound64Data))){
-            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_NO_CONTENT){
-                sent = true;
+    /**
+     * Checks if person fully enrolled in biometric system
+     * @return true if person fully enrolled in biometric system
+     */
+    public int getStaticModelsNumber() {
+        int result = 0;
+        try (CloseableHttpResponse response = OnePassRestClient.get().getPerson(personId,
+                new Header[]{new BasicHeader("X-Session-Id", sessionId)})) {
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                GetPersonResponseDto personDto = DtoHelper.create(response.getEntity().getContent(), GetPersonResponseDto.class);
+                final int[] modelNumber = new int[1];
+                personDto.models.forEach(model -> {
+                    if("STATIC_VOICE_KEY".equals(model.modelType)){
+                        modelNumber[0] = model.samplesCount;
+                    }
+                });
+                result = modelNumber[0];
+            } else {
+                ExceptionMapper.map(response);
             }
-            LOGGER.info("Result of sendRegistrationVoice is " + sent);
         } catch (IOException e) {
-            LOGGER.error("Couldn't send sound for static registration for person with id: " + id);
+            LOGGER.error("Couldn't check if the person with personId: " + personId + " is fully enrolled");
             e.printStackTrace();
         }
-        return sent;
+        return result;
     }
 
-    public boolean delete(){
+    /**
+     * Deletes person from biometric system
+     * @return true if person deleted successfully
+     */
+    public boolean delete() {
         boolean deleted = false;
-         try(CloseableHttpResponse response = OnePassRestClient.get().deletePerson(id)){
-             LOGGER.info("Deleting person with id: " + id);
-             LOGGER.info("Result: " + response.getStatusLine().getStatusCode());
-             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_NO_CONTENT){
-                 deleted = true;
-             }
-         } catch (IOException e) {
-             LOGGER.error("Couldn't delete person with id: " + id, e);
-             e.printStackTrace();
-         }
-         return deleted;
-    }
-
-    public VerificationApi startVerification(){
-        String sessionId = null;
-        String password = null;
-
-        try(CloseableHttpResponse response = OnePassRestClient.get().startVerification(id)) {
-            StartDynamicVerificationRequestDto verification = DtoHelper.create(response.getEntity().getContent(), StartDynamicVerificationRequestDto.class);
-            sessionId = verification.verificationId;
-            password = verification.password;
-        }
-        catch (IOException e){
+        try (CloseableHttpResponse response = OnePassRestClient.get().deletePerson(personId,
+                new Header[]{new BasicHeader("X-Session-Id", sessionId)})) {
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_NO_CONTENT) {
+                deleted = true;
+            } else {
+                ExceptionMapper.map(response);
+            }
+        } catch (IOException e) {
+            LOGGER.error("Couldn't delete person with personId: " + personId, e);
             e.printStackTrace();
         }
-        return new VerificationApi(password, sessionId);
+        return deleted;
     }
 
-    public VerificationApi startStaticVerification(){
-        String sessionId = null;
-        String password = null;
-
-        try(CloseableHttpResponse response = OnePassRestClient.get().startVerification(id)) {
-            StartStaticVerificationRequestDto verification =
-                    DtoHelper.create(response.getEntity().getContent(), StartStaticVerificationRequestDto.class);
-            sessionId = verification.verificationId;
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
-        return new VerificationApi(sessionId);
+    /**
+     * Starts enrollment (registration) transaction
+     * @param sessionId session identifier
+     * @return RegistrationApi object with registration operations
+     */
+    public RegistrationApi startRegistration(UUID sessionId) {
+        return new RegistrationApi(personId, sessionId);
     }
 
-    public VerificationApi verification (String password, String sessionId ){
-        return new VerificationApi(password, sessionId);
-    }
-
-    public VerificationApi verification (String sessionId ){
-        return new VerificationApi(sessionId);
+    /**
+     * Starts verification transaction
+     * @param sessionId session identifier
+     * @return VerificationApi object with verification operations
+     */
+    public VerificationApi startVerification(String sessionId) {
+        return new VerificationApi(personId, sessionId);
     }
 }
