@@ -14,9 +14,16 @@
                 '&amp;personId=' + application.personId +
 				'&amp;host=' + application.host +
 				'&amp;port=' + application.port +
+<<<<<<< local
+				'&amp;root=' + root +
+				'&amp;protocol=' + protocol"
+                        enctype="multipart/form-data" method="post"
+                        namelist="verification"/>
+=======
 				'&amp;root=' + application.root+
 				'&amp;protocol=' + application.protocol"
                         enctype="multipart/form-data" method="post"/>
+>>>>>>> other
             </filled>
         </record>
     </form>

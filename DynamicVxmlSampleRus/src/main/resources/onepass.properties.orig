@@ -1,0 +1,15 @@
+<<<<<<< local
+biometric.platform.host=192.168.2.199
+biometric.platform.port=8080
+=======
+biometric.platform.host=192.168.2.137
+biometric.platform.port=8080
+biometric.platform.protocol=http
+biometric.platform.root=vkonepass
+>>>>>>> other
+biometric.platform.threshold=90
+<<<<<<< local
+biometric.platform.attempts=3
+biometric.platform.protocol=http
+biometric.platform.root=vkonepass=======
+biometric.platform.attempts=3>>>>>>> other

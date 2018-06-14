@@ -22,12 +22,9 @@
             <filled>
                 <submit expr="'enrollment_1.jsp?personId=' + application.personId +
                 '&amp;password=' + encodeURI(password) +
-                '&amp;port=' + application.port +
-                '&amp;host=' + host +
-                '&amp;root=' + root +
-                '&amp;protocol=' + protocol"
+                '&amp;sessionId=' + sessionId"
                         enctype="multipart/form-data"
-                        method="post"/>
+                        method="post" namelist="enroll_1"/>
             </filled>
         </record>
     </form>

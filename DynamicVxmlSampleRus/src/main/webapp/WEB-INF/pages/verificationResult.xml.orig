@@ -4,7 +4,15 @@
         <subdialog name="verificationResult" method="get" fetchtimeout="3s"
                    srcexpr="'verificationResult.jsp?sessionId=' + application.sessionId +
                    '&amp;personId=' + application.personId +
-                   '&amp;transactionId=' + transactionId">
+                   '&amp;host=' + application.host +
+                   '&amp;port=' + application.port +
+<<<<<<< local
+                   '&amp;mode=' + application.root
+                    + '&amp;protocol=' + application.protocol">
+=======
+                   '&amp;root=' + application.root +
+                   '&amp;protocol=' + application.protocol">
+>>>>>>> other
             <filled>
                 <assign name="verificationCounter" expr="verificationCounter + 1"/>
                 <var name="application.score" expr="verificationResult.score"/>
@@ -13,7 +21,7 @@
                             <prompt bargein="false">
                                 Вы не прошли верификацию. Попробуйте еще раз!
                             </prompt>
-                        <submit next="startVerification.jsp" namelist="personId sessionId"/>
+                        <submit next="startVerification.jsp" namelist="personId"/>
                     <else/>
                         <prompt bargein="false">
                             Вы не прошли верификацию. До свидания!

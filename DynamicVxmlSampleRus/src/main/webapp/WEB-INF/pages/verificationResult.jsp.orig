@@ -21,25 +21,36 @@
 			? request.getParameter("host") : "02";
 	String port = (request.getParameter("port") != null && !request.getParameter("port").isEmpty())
 			? request.getParameter("port") : "02";
+<<<<<<< local
 	String root = (request.getParameter("root") != null && !request.getParameter("root").isEmpty())
 	        			? request.getParameter("root") : "02";
 	String protocol = (request.getParameter("protocol") != null && !request.getParameter("protocol").isEmpty())
 			? request.getParameter("protocol") : "none";
-	String transactionId = (request.getParameter("transactionId") != null && !request.getParameter("transactionId").isEmpty())
-			? request.getParameter("transactionId") : "none";
+=======
+	String root = (request.getParameter("root") != null
+          	&& !request.getParameter("root").isEmpty()) ? request.getParameter("root") : "none";
+	String protocol = (request.getParameter("protocol") != null
+           	&& !request.getParameter("protocol").isEmpty()) ? request.getParameter("protocol") : "none";
+>>>>>>> other
 
 	log.info("      jsp: verificationSessionId = " + sessionId);
 	log.info("      jsp: personId = " + personId);
 	log.info("      jsp: host = " + host);
 	log.info("      jsp: port = " + port);
+<<<<<<< local
 	log.info("      jsp: root = " + root);
     log.info("      jsp: protocol = " + protocol);
-	log.info("      jsp: transactionId = " + transactionId);
+=======
+   	log.info("      jsp: root = " + root);
+   	log.info("      jsp: protocol = " + protocol);
+>>>>>>> other
 
-    VerificationApi verificationApi = new VerificationApi(personId, sessionId, transactionId);
+	OnePassApi onePassApi 	= new OnePassApi(protocol, host, port, root);
+    PersonApi personApi 	= onePassApi.person(personId);
+    VerificationApi verificationApi = personApi.verification(sessionId);
 
-    int score = Double.valueOf(verificationApi.getDynamicVerificationScore()).intValue();
-	//boolean closed = verificationApi.closeVerificationSession();
+    int score = Double.valueOf(verificationApi.getVerificationScore()).intValue();
+	boolean closed = verificationApi.closeVerificationSession();
     log.info("      jsp: score = " + score);
 
 %>

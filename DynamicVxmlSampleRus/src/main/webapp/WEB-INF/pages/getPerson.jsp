@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <vxml version="2.0" xmlns="http://www.w3.org/2001/vxml" xml:lang="ru-RU" application="include/approot.xml">
 <%@ page language="java" contentType="text/xml; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="org.apache.log4j.Logger" %>
+<%@ page import="com.speechpro.biometric.platform.onepass.api.OnePassApi" %>
 <%@ page import="com.speechpro.biometric.platform.onepass.api.PersonApi"%>
-<%@ page import="com.speechpro.biometric.platform.onepass.api.OnePassApi"%>
+<%@ page import="com.speechpro.biometric.platform.onepass.api.SessionApi"%>
+	<%@ page import="org.apache.log4j.Logger" %>
 
-<%response.setHeader("Cache-Control", "no-cache");%>
+	<%response.setHeader("Cache-Control", "no-cache");%>
 
 <%
 
@@ -16,32 +17,28 @@
 	&& !request.getParameter("personId").isEmpty()) ? request.getParameter("personId") : "00";
 	String host = (request.getParameter("host") != null
 	&& !request.getParameter("host").isEmpty()) ? request.getParameter("host") : "00";
-	String port = (request.getParameter("port") != null
-	&& !request.getParameter("port").isEmpty()) ? request.getParameter("port") : "00";
-    String root = (request.getParameter("root") != null
-    && !request.getParameter("root").isEmpty()) ? request.getParameter("root") : "none";
-    String protocol = (request.getParameter("protocol") != null
-    && !request.getParameter("protocol").isEmpty()) ? request.getParameter("protocol") : "none";
+	String port = (request.getParameter("port"));
+	String protocol = (request.getParameter("protocol") != null
+    && !request.getParameter("protocol").isEmpty()) ? request.getParameter("protocol") : "00";
+	String root = (request.getParameter("root") != null
+	&& !request.getParameter("root").isEmpty()) ? request.getParameter("root") : "none";
 
-
-    log.info("      jsp: personId: " + personId);
-    log.info("      jsp: host: " + host);
-    log.info("      jsp: port: " + port);
-	log.info("      jsp: root: " + root);
 	log.info("      jsp: protocol: " + protocol);
-    OnePassApi onePassApi = new OnePassApi(protocol, host, port, root);
-	PersonApi personApi = onePassApi.person(personId);
-	boolean createdPerson = false;
+	log.info("      jsp: root: " + root);
+	log.info("      jsp: host: " + host);
+	log.info("      jsp: port: " + port);
+
+	OnePassApi onePassApi = new OnePassApi(protocol, host, port, root);
+	SessionApi sessionApi = new SessionApi("admin", "QL0AFWMIX8NRZTKeof9cXsvbvu8=", 201);
+	String sessionId = sessionApi.startSession().toString();
+
+	PersonApi personApi = onePassApi.person(personId, sessionId);
 	boolean isFullEnrollment = false;
 	boolean personExists = personApi.exists();
-	if(personExists){
-	        isFullEnrollment = personApi.isFullEnrolled();
-        }
-        else{
-             createdPerson = personApi.createPerson();
-        }
-    log.info("      jsp: personExists: " + personExists);
-	log.info("      jsp: createdPerson: " + createdPerson);
+	if (personExists) {
+		isFullEnrollment = personApi.getDynamicModelsNumber() == 2;
+	}
+	log.info("      jsp: personExists: " + personExists);
 	log.info("      jsp: isFullEnrollment: " + isFullEnrollment);
 
 %>
@@ -49,10 +46,13 @@
     <form id="getPerson">
 	    <block>
 			<assign name="application.host" expr="'<%=host%>'"/>
+			<assign name="application.protocol" expr="'<%=protocol%>'"/>
 	        <assign name="application.port" expr="<%=port%>"/>
+	        <assign name="application.root" expr="'<%=root%>'"/>
 			<assign name="application.personId" expr="'<%=personId%>'"/>
-	        <if cond="<%=personExists%> == true">
-	            <submit next="startVerification.jsp" namelist="personId host port mode root protocol"/>
+			<assign name="application.sessionId" expr="'<%=sessionId%>'"/>
+	        <if cond="<%=isFullEnrollment%> == true">
+	            <submit next="startVerification.jsp" namelist="sessionId personId host port protocol root"/>
 	        <else/>
 	            <goto next="enrollment_1.xml"/>
 	        </if>

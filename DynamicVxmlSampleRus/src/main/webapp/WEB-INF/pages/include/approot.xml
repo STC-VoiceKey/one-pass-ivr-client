@@ -11,6 +11,8 @@
     <var name="password" expr="''"/>
     <var name="threshold" expr=""/>
     <var name="attempts" expr="''"/>
+    <var name="sessionId" expr="''"/>
+    <var name="transactionId" expr="''"/>
     <var name="verificationSessionId" expr="''"/>
     <var name="password1_ru" expr="'ноль один два три четыре пять шесть семь восемь девять'"/>
     <var name="password2_ru" expr="'девять восемь семь шесть пять четыре три два один ноль'"/>
@@ -24,7 +26,10 @@
 
 
     <catch event = "connection.disconnect.hangup">
-        <submit next="checkFullEnrollment.jsp" namelist="personId host port root protocol"/>
+        <prompt>К сожалению, в работе системы возникли технические неполадки.
+            Пожалуйста, попробуйте позвонить позже.
+        </prompt>
+        <submit next="checkFullEnrollment.jsp" namelist="personId sessionId"/>
     </catch>
 
 </vxml>
