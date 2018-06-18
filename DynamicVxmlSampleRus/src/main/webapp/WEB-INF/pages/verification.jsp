@@ -7,6 +7,7 @@
     <%@ page import="com.speechpro.biometric.platform.onepass.util.SoundSender" %>
     <%@ page import="java.net.URLDecoder" %>
     <%@ page import="com.speechpro.biometric.platform.exception.platform.PlatformException" %>
+    <%@ page import="java.util.UUID" %>
 
     <%response.setHeader("Cache-Control", "no-cache");%>
 
@@ -36,10 +37,10 @@
         byte[] encoded = Base64.encodeBase64(audioBytes);
         String encodedString = new String(encoded);
 
-        VerificationApi verificationApi = new VerificationApi(personId, sessionId, transactionId);
+        VerificationApi verificationApi = new VerificationApi(personId, UUID.fromString(sessionId), UUID.fromString(transactionId));
         boolean serverStatus = false;
         try {
-            serverStatus = verificationApi.sendVerificationVoice(URLDecoder.decode(encodedPassword, "UTF-8"), encodedString);
+            serverStatus = verificationApi.sendDynamicVerificationVoice(URLDecoder.decode(encodedPassword, "UTF-8"), encodedString);
         } catch (PlatformException ex) {
             log.error(ex.getMessage());
         }

@@ -6,6 +6,7 @@
     <var name="protocol" expr="''"/>
     <var name="port" expr="0000"/>
     <var name="sessionId" expr="''"/>
+    <var name="transactionId" expr="''"/>
     <var name="verificationCounter" expr="1"/>
     <var name="score" expr="0"/>
     <var name="msisdn" expr="05"/>
@@ -32,6 +33,6 @@
     </catch>
 
     <catch event = "connection.disconnect">
-        <submit next="checkFullEnrollment.jsp" namelist="personId host port root protocol"/>
+        <submit next="checkFullEnrollment.jsp" namelist="personId sessionId"/>
     </catch>
 </vxml>

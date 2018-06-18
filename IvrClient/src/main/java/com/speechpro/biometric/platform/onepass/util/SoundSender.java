@@ -135,7 +135,7 @@ public class SoundSender {
             LOGGER.info("File " + path + " deleted");
         }
         catch (IOException ex){
-            LOGGER.error("Can't delete file " + path);
+            LOGGER.error("Can't deletePerson file " + path);
         }
     }
 }

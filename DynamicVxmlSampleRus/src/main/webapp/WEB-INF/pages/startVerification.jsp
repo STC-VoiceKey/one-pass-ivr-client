@@ -4,6 +4,7 @@
 <%@ page import="com.speechpro.biometric.platform.onepass.api.VerificationApi" %>
 <%@ page import="org.apache.log4j.Logger"%>
 <%@ page import="java.net.URLEncoder"%>
+	<%@ page import="java.util.UUID" %>
 
 	<%response.setHeader("Cache-Control", "no-cache");%>
 
@@ -20,9 +21,9 @@
     log.info("      jsp: personId = " + personId);
 	log.info("      jsp: sessionId = " + sessionId);
 
-	VerificationApi verificationApi = new VerificationApi(personId, sessionId);
+	VerificationApi verificationApi = new VerificationApi(personId, UUID.fromString(sessionId));
 	String password  = verificationApi.getVerificationPassword();
-	String transactionId = verificationApi.getTransactionId();
+	UUID transactionId = verificationApi.getTransactionId();
 
 	log.info("      jsp: password = " + password);
 	String encodedPassword = URLEncoder.encode(password, "UTF-8");
@@ -35,7 +36,7 @@
 	    <block>
 		    <var name="application.password" expr="'<%=password%>'"/>
 		    <var name="application.sessionId" expr="'<%=sessionId%>'"/>
-			<var name="application.transactionId" expr="'<%=transactionId%>'"/>
+			<var name="application.transactionId" expr="'<%=transactionId.toString()%>'"/>
 			<var name="application.personId" expr="'<%=personId%>'"/>
 			<var name="application.encodedPassword" expr="'<%=encodedPassword%>'"/>
 			<prompt bargein="false">

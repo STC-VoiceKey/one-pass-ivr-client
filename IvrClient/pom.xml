@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.speechpro.ivr</groupId>
     <artifactId>voicekey-ivr-client</artifactId>
-    <version>1.0.23</version>
+    <version>1.1.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -65,14 +65,6 @@
             <artifactId>biometric-platform-exception-testing</artifactId>
             <version>1.0.0</version>
         </dependency>
-
-        <!-- use jackson-datatype-jsr310 for Java 1.8 -->
-        <!--dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>2.5.0</version>
-        </dependency-->
-
     </dependencies>
 
     <build>

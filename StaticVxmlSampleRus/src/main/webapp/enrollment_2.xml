@@ -12,10 +12,8 @@
             </noinput>
             <filled>
                 <submit expr="'enrollment_2.jsp?personId=' + application.personId
-                        + '&amp;host=' + application.host
-				        + '&amp;port=' + application.port
-				        + '&amp;root=' + root +
-                        '&amp;protocol=' + protocol"
+                        + '&amp;sessionId=' + sessionId
+                        + '&amp;transactionId=' + transactionId"
                         enctype="multipart/form-data"
                         method="post"/>
             </filled>

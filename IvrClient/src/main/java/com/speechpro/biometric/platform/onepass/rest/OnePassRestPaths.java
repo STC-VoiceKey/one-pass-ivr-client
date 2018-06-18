@@ -4,17 +4,17 @@ package com.speechpro.biometric.platform.onepass.rest;
  * Created by sadurtinova on 09.09.2016.
  */
 public class OnePassRestPaths {
-    private static String session = "session";
-    private static String person = "person/%s";                                  // %s - person ID
-    private static String createPerson = "registration/person/%s";                     // %s - person ID
-    private static String personVoiceDynamicFile = "registration/voice/dynamic/file";            // %s - person ID
-    private static String personVoiceStaticFile = "registration/voice/static/file";             // %s - person ID
-    private static String personPhotoFile = "registration/face/file";                     // %s - person ID
-    private static String verificationVoiceDynamicFile = "verification/voice/dynamic/file";            // %s - session ID
-    private static String verificationVoiceStaticFile = "verification/voice/static/file";             // %s - session ID
-    private static String verificationStart = "verification/person/%s";                     // %s - person ID
-    private static String verificationScoreCloseSessionFalse = "verification/score";                         // %s - session ID
-    private static String closeVerification = "startVerification";                               // %s - session ID
+    private static String session                               = "session";
+    private static String person                                = "person/%s";                                  // %s - person ID
+    private static String createPerson                          = "registration/person/%s";                     // %s - person ID
+    private static String personVoiceDynamicFile                = "registration/voice/dynamic/file";            // %s - person ID
+    private static String personVoiceStaticFile                 = "registration/voice/static/file";             // %s - person ID
+    private static String personPhotoFile                       = "registration/face/file";                     // %s - person ID
+    private static String verificationVoiceDynamicFile          = "verification/voice/dynamic/file";            // %s - session ID
+    private static String verificationVoiceStaticFile           = "verification/voice/static/file";             // %s - session ID
+    private static String verificationStart                     = "verification/person/%s";                     // %s - person ID
+    private static String verificationScoreCloseSessionFalse    = "verification/score";                         // %s - session ID
+    private static String closeVerification                     = "verification";                               // %s - session ID
 
     private String root;
 

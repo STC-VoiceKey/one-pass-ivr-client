@@ -3,6 +3,7 @@
     <%@ page language="java" contentType="text/xml; charset=UTF-8" pageEncoding="UTF-8" %>
     <%@ page import="org.apache.log4j.Logger" %>
     <%@ page import="com.speechpro.biometric.platform.onepass.api.PersonApi" %>
+    <%@ page import="java.util.UUID" %>
 
     <%response.setHeader("Cache-Control", "no-cache");%>
 
@@ -19,11 +20,11 @@
         if (!personId.equals("00")) {
             log.info("      jsp: personId does not equal 00");
 
-            PersonApi personApi = new PersonApi(personId, sessionId);
-            boolean personExists = personApi.exists();
+            PersonApi personApi = new PersonApi(personId, UUID.fromString(sessionId));
+            boolean personExists = personApi.personExists();
             boolean isFullyEnrolled = personApi.getDynamicModelsNumber() == 2;
             if (!isFullyEnrolled && personExists) {
-                personApi.delete();
+                personApi.deletePerson();
             }
         }
     %>

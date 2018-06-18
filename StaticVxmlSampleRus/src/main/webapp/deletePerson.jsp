@@ -3,7 +3,7 @@
 	<%@ page language="java" contentType="text/xml; charset=UTF-8" pageEncoding="UTF-8"%>
 	<%@ page import="org.apache.log4j.Logger" %>
 	<%@ page import="com.speechpro.biometric.platform.onepass.api.PersonApi"%>
-	<%@ page import="com.speechpro.biometric.platform.onepass.api.OnePassApi"%>
+	<%@ page import="java.util.UUID" %>
 	<%response.setHeader("Cache-Control", "no-cache");%>
 
 	<%
@@ -13,29 +13,22 @@
 
 		String personId = (request.getParameter("personId") != null
 				&& !request.getParameter("personId").isEmpty()) ? request.getParameter("personId") : "00";
-		String host = (request.getParameter("host") != null
-				&& !request.getParameter("host").isEmpty()) ? request.getParameter("host") : "00";
-		String port = (request.getParameter("port") != null
-				&& !request.getParameter("port").isEmpty()) ? request.getParameter("port") : "";
-	    String root = (request.getParameter("root") != null
-   	    && !request.getParameter("root").isEmpty()) ? request.getParameter("root") : "none";
-	    String protocol = (request.getParameter("protocol") != null
-   	    && !request.getParameter("protocol").isEmpty()) ? request.getParameter("protocol") : "none";
+		String sessionId = (request.getParameter("sessionId") != null
+				&& !request.getParameter("sessionId").isEmpty()) ? request.getParameter("sessionId") : "00";
 
-		log.info("      jsp: host: " + host);
-		log.info("      jsp: port: " + port);
-		log.info("      jsp: Trying to delete a person with id = " + personId);
-		log.info("      jsp: protocol: " + protocol);
-        log.info("      jsp: root = " + root);
+		log.info("      jsp: personId: " + personId);
+		log.info("      jsp: sessionId: " + sessionId);
 
-		OnePassApi onePassApi = new OnePassApi(protocol, host, port, root);
-		PersonApi personApi = onePassApi.person(personId);
-		personApi.delete();
+		PersonApi personApi = new PersonApi(personId, UUID.fromString(sessionId));
+		personApi.deletePerson();
 	%>
 
 	<form id="getPerson">
 		<block>
-			<return/>
+			<prompt>
+				Ваш отпечаток удален! До свидания!
+			</prompt>
+			<disconnect/>
 		</block>
 	</form>
 </vxml>

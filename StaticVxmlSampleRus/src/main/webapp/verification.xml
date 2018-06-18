@@ -7,11 +7,7 @@
             </prompt>
             <filled>
                 <submit expr="'verification.jsp?sessionId=' + application.sessionId
-				+'&amp;personId=' + application.personId
-				+'&amp;host=' + application.host
-				+'&amp;port=' + port
-				+'&amp;root=' + application.root
-				+'&amp;protocol=' + application.protocol"
+				+'&amp;personId=' + application.personId"
                 enctype="multipart/form-data" method="post"/>
             </filled>
         </record>

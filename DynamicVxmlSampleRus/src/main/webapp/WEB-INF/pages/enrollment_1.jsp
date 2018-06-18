@@ -28,9 +28,9 @@
         log.info("      jsp: password: " + URLDecoder.decode(password, "UTF-8"));
         log.info("      jsp: sessionId = " + sessionId);
 
-        PersonApi personApi = new PersonApi(personId, sessionId);
+        PersonApi personApi = new PersonApi(personId, UUID.fromString(sessionId));
         try {
-            personApi.delete();
+            personApi.deletePerson();
         } catch (Exception ex) {
             log.error(ex.getMessage());
         }

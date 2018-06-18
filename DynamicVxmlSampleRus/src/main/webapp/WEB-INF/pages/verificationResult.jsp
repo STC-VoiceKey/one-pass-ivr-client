@@ -5,8 +5,9 @@
 <%@ page import="com.speechpro.biometric.platform.onepass.api.PersonApi"%>
 <%@ page import="com.speechpro.biometric.platform.onepass.api.OnePassApi"%>
 <%@ page import="com.speechpro.biometric.platform.onepass.api.VerificationApi"%>
+	<%@ page import="java.util.UUID" %>
 
-<%response.setHeader("Cache-Control", "no-cache");%>
+	<%response.setHeader("Cache-Control", "no-cache");%>
 
 <%
 	Logger log = Logger.getLogger("getPerson");
@@ -36,7 +37,7 @@
     log.info("      jsp: protocol = " + protocol);
 	log.info("      jsp: transactionId = " + transactionId);
 
-    VerificationApi verificationApi = new VerificationApi(personId, sessionId, transactionId);
+    VerificationApi verificationApi = new VerificationApi(personId, UUID.fromString(sessionId), UUID.fromString(transactionId));
 
     int score = Double.valueOf(verificationApi.getDynamicVerificationScore()).intValue();
 	//boolean closed = verificationApi.closeVerificationSession();

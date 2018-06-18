@@ -3,6 +3,7 @@ package com.speechpro.biometric.platform.onepass.api;
 
 import com.speechpro.biometric.platform.onepass.rest.OnePassRestClient;
 
+import java.util.UUID;
 import java.util.logging.Logger;
 
 /**
@@ -29,7 +30,7 @@ public class OnePassApi {
      * @param sessionId session identifier
      * @return PersonApi
      */
-    public PersonApi person(String personId, String sessionId){
+    public PersonApi person(String personId, UUID sessionId){
         return new PersonApi(personId, sessionId);
     }
 

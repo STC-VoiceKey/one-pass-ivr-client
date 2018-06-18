@@ -5,6 +5,7 @@
 <%@ page import="com.speechpro.biometric.platform.onepass.api.PersonApi"%>
 <%@ page import="com.speechpro.biometric.platform.onepass.api.SessionApi"%>
 	<%@ page import="org.apache.log4j.Logger" %>
+	<%@ page import="java.util.UUID" %>
 
 	<%response.setHeader("Cache-Control", "no-cache");%>
 
@@ -32,9 +33,9 @@
 	SessionApi sessionApi = new SessionApi("admin", "QL0AFWMIX8NRZTKeof9cXsvbvu8=", 201);
 	String sessionId = sessionApi.startSession().toString();
 
-	PersonApi personApi = onePassApi.person(personId, sessionId);
+	PersonApi personApi = onePassApi.person(personId, UUID.fromString(sessionId));
 	boolean isFullEnrollment = false;
-	boolean personExists = personApi.exists();
+	boolean personExists = personApi.personExists();
 	if (personExists) {
 		isFullEnrollment = personApi.getDynamicModelsNumber() == 2;
 	}

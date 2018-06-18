@@ -4,10 +4,7 @@
         <subdialog name="verificationResult" method="get" fetchtimeout="3s"
                    srcexpr="'verificationResult.jsp?sessionId=' + application.sessionId
 				+ '&amp;personId=' + application.personId
-				+'&amp;port=' + port
-				+ '&amp;host=' + application.host
-                   '&amp;root=' + application.root +
-                   '&amp;protocol=' + application.protocol">
+				+'&amp;transactionId=' + transactionId">
             <filled>
                 <assign name="application.score" expr="verificationResult.score"/>
                 <if cond="application.score==400">
@@ -21,7 +18,7 @@
                             <prompt>
                                 Вы не прошли верификацию. Попробуйте еще раз.
                             </prompt>
-                            <submit next="startVerification.jsp" namelist="personId host port"/>
+                            <submit next="verification.jsp" namelist="personId sessionId"/>
                         <else/>
                             <prompt>
                                 Вы не прошли верификацию. До свидания!

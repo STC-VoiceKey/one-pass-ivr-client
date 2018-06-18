@@ -3,8 +3,9 @@
 <%@ page language="java" contentType="text/xml; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="org.apache.log4j.Logger" %>
 <%@ page import="com.speechpro.biometric.platform.onepass.api.PersonApi"%>
+	<%@ page import="java.util.UUID" %>
 
-<%response.setHeader("Cache-Control", "no-cache");%>
+	<%response.setHeader("Cache-Control", "no-cache");%>
 
 <%
 	Logger log = Logger.getLogger("deletePerson");
@@ -16,10 +17,10 @@
 	String sessionId = (request.getParameter("sessionId") != null
 			&& !request.getParameter("sessionId").isEmpty()) ? request.getParameter("sessionId") : "00";
 
-	log.info("      jsp: Trying to delete a person with id = " + personId);
+	log.info("      jsp: Trying to deletePerson a person with id = " + personId);
 
-    PersonApi personApi = new PersonApi(personId, sessionId);
-    personApi.delete();
+    PersonApi personApi = new PersonApi(personId, UUID.fromString(sessionId));
+    personApi.deletePerson();
 %>
 
 <form id="getPerson">

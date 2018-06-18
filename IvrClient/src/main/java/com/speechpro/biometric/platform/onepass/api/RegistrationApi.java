@@ -65,6 +65,7 @@ public class RegistrationApi {
                         StartTransactionRequestDto.class);
                 this.transactionId = UUID.fromString(startTransaction.transactionId);
                 registered = true;
+                System.out.println(transactionId);
             } else {
                 ExceptionMapper.map(response);
             }
