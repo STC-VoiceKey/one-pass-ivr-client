@@ -2,8 +2,6 @@ package com.speechpro.biometric.platform.onepass.rest;
 
 import com.speechpro.biometric.platform.onepass.util.JsonSerializer;
 import org.apache.http.Header;
-import org.apache.http.HttpHost;
-import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -37,12 +35,6 @@ public class BasicRestClient {
 
     CloseableHttpResponse get(String uri, Header[] headers) {
         HttpGet getRequest = new HttpGet(uri);
-        HttpHost proxy = new HttpHost("192.168.8.100", 3128);
-        RequestConfig config = RequestConfig.custom()
-                .setProxy(proxy)
-                .build();
-        getRequest.setConfig(config);
-        System.out.println(uri);
         if (defaultHeaders != null && headers != null) {
             Header[] allHeaders = mergeHeaders(defaultHeaders, headers);
             getRequest.setHeaders(allHeaders);
@@ -63,13 +55,6 @@ public class BasicRestClient {
 
     CloseableHttpResponse post(String uri, Object body, Header[] headers) {
         HttpPost postRequest = new HttpPost(uri);
-        System.out.println(uri);
-        System.out.println(body.toString());
-        HttpHost proxy = new HttpHost("192.168.8.100", 3128);
-        RequestConfig config = RequestConfig.custom()
-                .setProxy(proxy)
-                .build();
-        postRequest.setConfig(config);
         if (body != null)
             postRequest.setEntity(new StringEntity(JsonSerializer.serialize(body), "utf-8"));
         if (defaultHeaders != null && headers != null) {
@@ -83,7 +68,6 @@ public class BasicRestClient {
         CloseableHttpResponse result = null;
         try {
             result = httpClient.execute(postRequest);
-           // System.out.println(result.toString());
         } catch (IOException e) {
             LOGGER.error("failed to send post request", e);
             e.printStackTrace();
@@ -94,11 +78,6 @@ public class BasicRestClient {
 
     CloseableHttpResponse delete(String uri, Header[] headers) {
         HttpDelete deleteRequest = new HttpDelete(uri);
-        HttpHost proxy = new HttpHost("192.168.8.100", 3128);
-        RequestConfig config = RequestConfig.custom()
-                .setProxy(proxy)
-                .build();
-        deleteRequest.setConfig(config);
         if (defaultHeaders != null && headers != null) {
             Header[] allHeaders = mergeHeaders(defaultHeaders, headers);
             deleteRequest.setHeaders(allHeaders);
