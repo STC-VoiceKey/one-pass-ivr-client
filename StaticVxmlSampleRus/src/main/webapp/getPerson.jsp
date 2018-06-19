@@ -36,7 +36,7 @@
         log.info("      jsp: protocol: " + protocol);
 
         OnePassApi onePassApi = new OnePassApi(protocol, host, port, root);
-        SessionApi sessionApi = new SessionApi("admin", "QL0AFWMIX8NRZTKeof9cXsvbvu8=", 201);
+        SessionApi sessionApi = new SessionApi("ivr_user", "QL0AFWMIX8NRZTKeof9cXsvbvu8=", 201);
         UUID sessionId = sessionApi.startSession();
         PersonApi personApi = onePassApi.person(personId, sessionId);
         RegistrationApi registrationApi = personApi.startRegistration();

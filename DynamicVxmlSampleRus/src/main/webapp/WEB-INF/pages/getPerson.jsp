@@ -30,7 +30,7 @@
 	log.info("      jsp: port: " + port);
 
 	OnePassApi onePassApi = new OnePassApi(protocol, host, port, root);
-	SessionApi sessionApi = new SessionApi("admin", "QL0AFWMIX8NRZTKeof9cXsvbvu8=", 201);
+	SessionApi sessionApi = new SessionApi("ivr_user", "QL0AFWMIX8NRZTKeof9cXsvbvu8=", 201);
 	String sessionId = sessionApi.startSession().toString();
 
 	PersonApi personApi = onePassApi.person(personId, UUID.fromString(sessionId));
